@@ -1,4 +1,4 @@
-const Section = require('../models/section');
+const Section = require('../models/Section');
 const Course = require('../models/Course');
 
 // create section handler function
