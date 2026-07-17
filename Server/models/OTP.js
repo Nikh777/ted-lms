@@ -1,3 +1,4 @@
+const otpTemplate = require("../mail/emailVerificationTemplate.js");
 const mongoose = require('mongoose');
 const mailSender = require('../utils/mailSender');
 
@@ -17,25 +18,26 @@ const OTPSchema = new mongoose.Schema({
     },
 });
 
-// Define a function to send emails
+// Streamlined background execution handler
 async function sendVerificationEmail(email, otp) {
-    try {
-        const mailResponse = await mailSender(email, "Verification Email from TED", otp);
-        console.log("Email sent successfully: ", mailResponse);
-    } catch (error) {
-        console.log("Error occurred while sending email: ", error);
-        throw error;
-    }
+    // Await hata diya hai taaki thread block na ho
+    mailSender(email, "Verification Email from TED", otpTemplate(otp))
+        .then((mailResponse) => {
+            console.log("✅ OTP Email queued successfully in background:", mailResponse);
+        })
+        .catch((error) => {
+            console.error("❌ Background Mail Sender Failed:", error.message);
+        });
 }
 
-// Pre-save hook to send email before the document is saved to the database
-OTPSchema.pre("save", async function () {
+// FIXED: pre("save") ko badal kar post("save") kar diya hai
+OTPSchema.post("save", async function (doc) {
     try {
-        if (this.isNew) {
-            await sendVerificationEmail(this.email, this.otp);
-        }
+        // Safe document data reference passing
+        sendVerificationEmail(doc.email, doc.otp);
     } catch (error) {
-        console.log(error);
+        console.error("Hook catch block logs:", error);
     }
 });
+
 module.exports = mongoose.model('OTP', OTPSchema);

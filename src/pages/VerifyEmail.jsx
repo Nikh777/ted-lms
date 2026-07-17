@@ -41,7 +41,7 @@ function VerifyEmail() {
         password,
         confirmPassword,
         otp,
-        navigate
+        navigate,
       )
     );
   };
@@ -93,10 +93,10 @@ function VerifyEmail() {
                 <BiArrowBack /> Back To Signup
               </p>
             </Link>
-            <button
-              className="flex items-center text-blue-100 gap-x-2"
-              onClick={() => dispatch(sendOtp(signupData.email))}
-            >
+          <button
+  className="flex items-center text-blue-100 gap-x-2"
+  onClick={() => dispatch(sendOtp(signupData.email, navigate))}
+>
               <RxCountdownTimer />
               Resend it
             </button>

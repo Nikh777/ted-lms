@@ -1,4 +1,7 @@
-const BASE_URL = "https://ted-lms.onrender.com/api/v1";
+// AUTOMATIC ENVIRONMENT INTERCEPTOR
+const BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  ? "http://localhost:5000/api/v1" // Laptop/Local Development Setup
+  : "https://ted-lms.onrender.com/api/v1"; // Vercel Live Production App Deployment
 
 // AUTH ENDPOINTS
 export const endpoints = {
@@ -38,8 +41,7 @@ export const courseEndpoints = {
   DELETE_SECTION_API: BASE_URL + "/course/deleteSection",
   DELETE_SUBSECTION_API: BASE_URL + "/course/deleteSubSection",
   DELETE_COURSE_API: BASE_URL + "/course/deleteCourse",
-  GET_FULL_COURSE_DETAILS_AUTHENTICATED:
-    BASE_URL + "/course/getFullCourseDetails",
+  GET_FULL_COURSE_DETAILS_AUTHENTICATED: BASE_URL + "/course/getFullCourseDetails",
   LECTURE_COMPLETION_API: BASE_URL + "/course/updateCourseProgress",
   CREATE_RATING_API: BASE_URL + "/course/createRating",
 }
@@ -58,6 +60,7 @@ export const categories = {
 export const catalogData = {
   CATALOGPAGEDATA_API: BASE_URL + "/course/getCategoryPageDetails",
 }
+
 // CONTACT-US API
 export const contactusEndpoint = {
   CONTACT_US_API: BASE_URL + "/reach/contact",
@@ -72,7 +75,6 @@ export const settingsEndpoints = {
 }
 
 // ADMIN ENDPOINTS
-
 export const adminEndpoints = {
   ADMIN_LOGIN_API: BASE_URL + "/admin/login",
   ADMIN_DASHBOARD_API: BASE_URL + "/admin/dashboard",
@@ -91,7 +93,7 @@ export const instructorApplicationEndpoints = {
   GET_INSTRUCTOR_APPLICATION_API: BASE_URL + "/instructor/application",
 }
 
-// DEMO BOOKING ENDPOINTS (isolated, new feature)
+// DEMO BOOKING ENDPOINTS
 export const demoEndpoints = {
   BOOK_DEMO_API: BASE_URL + "/demo/book",
   ADMIN_DEMO_REQUESTS_API: BASE_URL + "/demo/requests",
