@@ -1,33 +1,23 @@
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 
 const mailSender = async (email, title, body) => {
     try {
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true, // Port 465 ke liye true hona zaroori hai
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-            tls: {
-                rejectUnauthorized: false // Handshake failure ko rokkne ke liye
-            },
-            // Railway ko IPv4 use karne ke liye force karne ki strict setting
-            family: 4 
-        });
-
-        let info = await transporter.sendMail({
-            from: `"TED LMS Platform" <${process.env.EMAIL_USER}>`,
-            to: email,
+        const response = await axios.post('https://api.brevo.com/v3/smtp/email', {
+            sender: { name: "TED LMS Platform", email: process.env.EMAIL_USER }, // Aapki Gmail ID
+            to: [{ email: email }],
             subject: title,
-            html: body,
+            htmlContent: body
+        }, {
+            headers: {
+                'api-key': process.env.BREVO_API_KEY, // Railway variables se key uthayega
+                'Content-Type': 'application/json'
+            }
         });
 
-        console.log('✅ Mail successfully dispatched:', info.messageId);
-        return info;
+        console.log('✅ Mail successfully dispatched via Brevo API:', response.data);
+        return response.data;
     } catch (error) {
-        console.error('❌ Nodemailer Error:', error.message);
+        console.error('❌ Brevo API Error:', error.response ? error.response.data : error.message);
         throw error;
     }
 };
