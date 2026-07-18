@@ -2,17 +2,18 @@ const nodemailer = require('nodemailer');
 
 const mailSender = async (email, title, body) => {
     try {
-        // Render Cloud Compatibility Setup (Port 587 TLS)
+        // Strict Configuration Verification Mapping
         const transporter = nodemailer.createTransport({
-            host: process.env.MAIL_HOST, // smtp.gmail.com
-            port: 587, // Standard open port for Cloud platforms (Render/Vercel)
-            secure: false, // Must be false for port 587
+            service: 'gmail', // Explicitly setting service tells Nodemailer exactly how to routing
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false, 
             auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS, // App password without spaces
+                user: process.env.EMAIL_USER, // Ensure this exact name is in Render Dashboard
+                pass: process.env.EMAIL_PASS, // 16-character google app password
             },
             tls: {
-                rejectUnauthorized: false // Bypasses proxy network drop delays
+                rejectUnauthorized: false
             }
         });
 
