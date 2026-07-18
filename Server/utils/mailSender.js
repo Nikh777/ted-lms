@@ -1,23 +1,29 @@
-const { Resend } = require('resend');
-
-// Resend official initialization helper
-// Render Environment variable se API key check karega
-const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy_key");
+const nodemailer = require('nodemailer');
 
 const mailSender = async (email, title, body) => {
     try {
-        // Direct API payload routing (Bypasses all network TCP port blockings)
-        const data = await resend.emails.send({
-            from: 'TED LMS Platform <onboarding@resend.dev>', // Free default sandbox testing email
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            }
+        });
+
+        let info = await transporter.sendMail({
+            from: `"TED LMS Platform" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: title,
             html: body,
         });
 
-        console.log('✅ Mail successfully dispatched via Resend API Framework:', data.id);
-        return data;
+        console.log('✅ Mail successfully dispatched:', info.messageId);
+        return info;
     } catch (error) {
-        console.error('❌ Resend API Transport Exception Error:', error.message);
+        console.error('❌ Nodemailer Error:', error.message);
         throw error;
     }
 };
