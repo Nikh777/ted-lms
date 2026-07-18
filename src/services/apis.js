@@ -1,7 +1,7 @@
 // AUTOMATIC ENVIRONMENT INTERCEPTOR
 const BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
   ? "http://localhost:5000/api/v1" // Laptop/Local Development Setup
-  : "https://ted-lms.onrender.com/api/v1"; // Vercel Live Production App Deployment
+  : (process.env.REACT_APP_BASE_URL ? `${process.env.REACT_APP_BASE_URL}/api/v1` : "https://ted-lms-production.up.railway.app/api/v1");
 
 // AUTH ENDPOINTS
 export const endpoints = {
