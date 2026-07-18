@@ -3,13 +3,14 @@ const axios = require('axios');
 const mailSender = async (email, title, body) => {
     try {
         const response = await axios.post('https://api.brevo.com/v3/smtp/email', {
-            sender: { name: "TED LMS Platform", email: process.env.EMAIL_USER }, // Aapki Gmail ID
+            sender: { name: "TED LMS Platform", email: process.env.EMAIL_USER }, 
             to: [{ email: email }],
             subject: title,
             htmlContent: body
         }, {
             headers: {
-                'api-key': process.env.BREVO_API_KEY, // Railway variables se key uthayega
+                'accept': 'application/json',
+                'api-key': String(process.env.BREVO_API_KEY).trim(), // Kisi bhi space ko auto-clean karega
                 'Content-Type': 'application/json'
             }
         });
