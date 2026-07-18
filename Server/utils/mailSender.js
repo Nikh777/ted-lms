@@ -2,18 +2,19 @@ const nodemailer = require('nodemailer');
 
 const mailSender = async (email, title, body) => {
     try {
-        // Strict Configuration Verification Mapping
+        // Rigid Production-Grade SMTP Configuration
         const transporter = nodemailer.createTransport({
-            service: 'gmail', // Explicitly setting service tells Nodemailer exactly how to routing
+            service: 'gmail',
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false, 
+            port: 587,             // Port strictly 587
+            secure: false,         // secure must be false for 587
             auth: {
-                user: process.env.EMAIL_USER, // Ensure this exact name is in Render Dashboard
-                pass: process.env.EMAIL_PASS, // 16-character google app password
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
             },
             tls: {
-                rejectUnauthorized: false
+                rejectUnauthorized: false, // Prevents proxy drop downs
+                minVersion: 'TLSv1.2'      // Enforces network standards
             }
         });
 
